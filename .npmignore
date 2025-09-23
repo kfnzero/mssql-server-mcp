@@ -4,10 +4,25 @@ src/
 jest.config.js
 .eslintrc.js
 tsconfig.json
-.env
-.env.example
 coverage/
 .nyc_output/
 .DS_Store
 *.log
 node_modules/
+
+# 敏感配置檔案
+.env
+.env.*
+!.env.example
+.mcp.json
+.mcp.local.json
+config/production.json
+config/local.json
+
+# 測試檔案
+test-*.js
+*.test.js
+*.spec.js
+
+# 開發工具
+.claude/
