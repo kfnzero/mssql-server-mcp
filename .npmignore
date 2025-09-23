@@ -1,0 +1,13 @@
+src/
+*.test.ts
+*.spec.ts
+jest.config.js
+.eslintrc.js
+tsconfig.json
+.env
+.env.example
+coverage/
+.nyc_output/
+.DS_Store
+*.log
+node_modules/

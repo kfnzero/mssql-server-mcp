@@ -137,3 +137,22 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# MCP 和敏感配置檔案
+.mcp.json
+.mcp.local.json
+.env
+.env.local
+.env.production
+.env.test
+**/config/production.json
+**/config/local.json
+
+# 測試和臨時檔案
+test-results/
+temp/
+tmp/
+
+# 敏感的測試資料
+**/test-data/production/
+**/test-data/real/
