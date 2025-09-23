@@ -14,60 +14,143 @@
 
 ## 快速開始
 
-### 安裝
+### 使用 Claude Code (最簡單)
+
+如果您使用 Claude Code，可以直接使用以下指令：
+
+```bash
+# 自動配置到 Claude Desktop
+claude mcp add mssql-server-mcp
+```
+
+然後在 Claude Desktop 中就可以直接使用所有 MSSQL 功能！
+
+### 使用 npx
+
+無需安裝，直接使用：
+
+```bash
+# 使用 npx 直接執行 (自動下載最新版本)
+npx -y mssql-server-mcp
+```
+
+### 全域安裝
 
 ```bash
 npm install -g mssql-server-mcp
-```
-
-### 設定環境變數
-
-```bash
-# 複製環境變數範例檔案
-cp .env.example .env
-
-# 編輯 .env 檔案，填入真實的連線資訊
-vim .env
-```
-
-⚠️ **重要：.env 檔案包含敏感資訊，不會被提交到版本控制。**
-
-### 執行
-
-```bash
 mssql-server-mcp
 ```
 
 ## MCP 客戶端整合
 
-在 Claude Desktop 或其他 MCP 客戶端中配置：
+### Claude Code 快速配置 (推薦)
+
+使用 Claude Code 的 `add mcp` 指令快速配置：
 
 ```bash
-# 複製 MCP 配置範例
-cp .mcp.example.json .mcp.json
+# 快速新增 MCP 伺服器
+claude mcp add mssql-server-mcp
 
-# 編輯配置檔案，填入真實連線資訊
-vim .mcp.json
+# 或者指定自訂名稱
+claude mcp add mssql-server-mcp --name my-mssql-server
 ```
 
-配置範例：
+此指令會自動：
+- 安裝或更新到最新版本
+- 在 Claude Desktop 配置中新增 MCP 伺服器
+- 引導您設定環境變數
+
+執行後請設定以下環境變數：
+- `MSSQL_SERVER`: 您的 SQL Server 位址
+- `MSSQL_DATABASE`: 目標資料庫名稱
+- `MSSQL_USER`: 資料庫使用者名稱
+- `MSSQL_PASSWORD`: 資料庫密碼
+- `MSSQL_ENCRYPT`: 是否啟用加密 (建議設為 true)
+- `MSSQL_TRUST_SERVER_CERTIFICATE`: 是否信任伺服器憑證
+
+### Claude Desktop 手動配置
+
+在 Claude Desktop 的設定檔中加入以下配置：
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
+
+#### 方法 1: 使用 npx (推薦)
+
 ```json
 {
   "mcpServers": {
     "mssql-server": {
-      "command": "mssql-server-mcp",
+      "command": "npx",
+      "args": ["-y", "mssql-server-mcp"],
       "env": {
-        "MSSQL_SERVER": "your_actual_server",
-        "MSSQL_DATABASE": "your_actual_database", 
-        "MSSQL_USER": "your_actual_user",
-        "MSSQL_PASSWORD": "your_actual_password"
+        "MSSQL_SERVER": "your_server_ip",
+        "MSSQL_PORT": "1433",
+        "MSSQL_DATABASE": "your_database",
+        "MSSQL_USER": "your_username",
+        "MSSQL_PASSWORD": "your_password",
+        "MSSQL_ENCRYPT": "true",
+        "MSSQL_TRUST_SERVER_CERTIFICATE": "true"
       }
     }
   }
 }
 ```
 
-⚠️ **重要：.mcp.json 檔案包含敏感資訊，不會被提交到版本控制。**
+#### 方法 2: 使用全域安裝
+
+```json
+{
+  "mcpServers": {
+    "mssql-server": {
+      "command": "mssql-server-mcp",
+      "env": {
+        "MSSQL_SERVER": "your_server_ip",
+        "MSSQL_PORT": "1433",
+        "MSSQL_DATABASE": "your_database",
+        "MSSQL_USER": "your_username",
+        "MSSQL_PASSWORD": "your_password",
+        "MSSQL_ENCRYPT": "true",
+        "MSSQL_TRUST_SERVER_CERTIFICATE": "true"
+      }
+    }
+  }
+}
+```
+
+#### 方法 3: 本地開發路徑
+
+```json
+{
+  "mcpServers": {
+    "mssql-server": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "cwd": "/absolute/path/to/mssql-server-mcp",
+      "env": {
+        "MSSQL_SERVER": "localhost",
+        "MSSQL_PORT": "1433",
+        "MSSQL_DATABASE": "your_database",
+        "MSSQL_USER": "sa",
+        "MSSQL_PASSWORD": "your_password",
+        "MSSQL_ENCRYPT": "false",
+        "MSSQL_TRUST_SERVER_CERTIFICATE": "true",
+        "MSSQL_DEBUG": "true"
+      }
+    }
+  }
+}
+```
+
+### 其他 MCP 客戶端
+
+對於其他 MCP 客戶端，請參考上述配置範例，調整為對應的配置格式。
+
+⚠️ **重要安全提醒：**
+- 請勿將包含真實密碼的配置檔案提交到版本控制
+- 建議在測試環境中使用專用的測試帳戶
+- 在生產環境中啟用 SSL 加密連線
+- 確保 MCP 客戶端配置檔案權限設為僅當前使用者可讀 (chmod 600)
 
 ## 可用工具
 
